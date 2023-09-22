@@ -24,6 +24,20 @@ let context = new AudioContext();
 const sources = {};
 let isPlaying = false;
 
+function init() {
+  context = new AudioContext();
+  AUDIO_BLOCKS.forEach(function createMediaSource(block) {
+    const id = block.id;
+    const music = block.children[1];
+    const analyser = context.createAnalyser();
+    const source = context.createMediaElementSource(music);
+    source.connect(analyser);
+    analyser.connect(context.destination);
+    sources[id] = {source, analyser};
+  });
+  PLAY_PAUSE_BTN.innerHTML = playIcon;
+}
+
 function togglePlaying() {
   startContext();
   isPlaying = !isPlaying;
@@ -50,22 +64,6 @@ async function startContext() {
   if (context.state == "suspended") await context.resume();
 }
 
-PLAY_PAUSE_BTN.addEventListener("click", togglePlaying)
-
-function init() {
-  context = new AudioContext();
-  AUDIO_BLOCKS.forEach(function createMediaSource(block) {
-    const id = block.id;
-    const music = block.children[1];
-    const analyser = context.createAnalyser();
-    const source = context.createMediaElementSource(music);
-    source.connect(analyser);
-    analyser.connect(context.destination);
-    sources[id] = {source, analyser};
-  });
-  PLAY_PAUSE_BTN.innerHTML = playIcon;
-}
-
 function getAudioVolume(id, divToChange, analyser) {
   const fbc_array = new Uint8Array(analyser.frequencyBinCount);
   analyser.getByteFrequencyData(fbc_array)
@@ -74,4 +72,5 @@ function getAudioVolume(id, divToChange, analyser) {
   return requestAnimationFrame(() => getAudioVolume(id, divToChange, analyser));
 }
 
+PLAY_PAUSE_BTN.addEventListener("click", togglePlaying)
 window.addEventListener("load", init);
