@@ -55,7 +55,7 @@ function togglePlaying() {
     AUDIO_BLOCKS.forEach(function pauseTrack(block) {
       block.children[1].pause();
       cancelAnimationFrame(animationIds[block.id]);
-      PLAY_PAUSE_BTN.innerHTML = playIcon
+      PLAY_PAUSE_BTN.innerHTML = playIcon;
     });
   }
 }
