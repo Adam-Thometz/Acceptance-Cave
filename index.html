@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceptance Cave by Tesla's Ghost</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Acceptance Cave by Tesla's Ghost</h1>
+  <div class="blocks">
+    <div class="block" id="keys">
+      <div class="sound"></div>
+      <audio
+        src="acceptance-cave/keys.wav"
+        crossorigin="anonymous"
+      ></audio>
+      <p class="instrument-name">Keys</p>
+    </div>
+    <div class="block" id="synths">
+      <div class="sound"></div>
+      <audio
+        src="acceptance-cave/synths.wav"
+        crossorigin="anonymous"
+      ></audio>
+      <p class="instrument-name">Synths</p>
+    </div>
+    <div class="block" id="bass">
+      <div class="sound"></div>
+      <audio
+        src="acceptance-cave/bass.wav"
+        crossorigin="anonymous"
+      ></audio>
+      <p class="instrument-name">Bass</p>
+    </div>
+    <div class="block" id="drums">
+      <div class="sound"></div>
+      <audio
+        src="acceptance-cave/drums.wav"
+        crossorigin="anonymous"
+      ></audio>
+      <p class="instrument-name">Drums</p>
+    </div>
+  </div>
+  <div id="controls">
+    <button id="playPause"></button>
+  </div>
+</body>
+<script src="app.js"></script>
+</html>

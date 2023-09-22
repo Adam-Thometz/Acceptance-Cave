@@ -1,0 +1,82 @@
+body {
+  background-color: black;
+  color: #EEE;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  height: 5vh;
+  margin: 0;
+  text-align: center;
+}
+
+.blocks {
+  width: 100vw;
+  height: 88vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  align-items: center;
+  justify-items: center;
+}
+
+.block {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.instrument-name {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+}
+
+.sound {
+  width: 1vw;
+  height: 1vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+}
+
+#keys > .sound {
+  background-color: red;
+}
+
+#synths > .sound {
+  background-color: green;
+}
+
+#bass > .sound {
+  background-color: blue;
+}
+
+#drums > .sound {
+  background-color: yellow;
+}
+
+#controls {
+  height: 7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#playPause {
+  height: 100%;
+  width: 5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+}
