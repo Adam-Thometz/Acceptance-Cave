@@ -12,7 +12,7 @@ const pauseIcon = '<i class="fa-solid fa-pause" style="color: #ffffff;"></i>';
 const SCALES = {
   keys: 1.5,
   synths: 1.5,
-  bass: 0.5,
+  bass: 0.75,
   drums: 5,
 };
 
@@ -33,41 +33,42 @@ function init() {
     const source = context.createMediaElementSource(music);
     source.connect(analyser);
     analyser.connect(context.destination);
-    sources[id] = {source, analyser};
+    sources[id] = analyser;
   });
   PLAY_PAUSE_BTN.innerHTML = playIcon;
-}
-
-function togglePlaying() {
-  startContext();
-  isPlaying = !isPlaying;
-  if (isPlaying) {
-    AUDIO_BLOCKS.forEach(function playTrack(block) {
-      const id = block.id;
-      const divToChange = block.children[0]
-      const music = block.children[1]
-      music.play();
-      const analyser = sources[id].analyser;
-      animationIds[id] = getAudioVolume(id, divToChange, analyser);
-      PLAY_PAUSE_BTN.innerHTML = pauseIcon;
-    });
-  } else {
-    AUDIO_BLOCKS.forEach(function pauseTrack(block) {
-      block.children[1].pause();
-      cancelAnimationFrame(animationIds[block.id]);
-      PLAY_PAUSE_BTN.innerHTML = playIcon;
-    });
-  }
 }
 
 async function startContext() {
   if (context.state == "suspended") await context.resume();
 }
 
+function playTrack(block) {
+  startContext();
+  const id = block.id;
+  const divToChange = block.children[0];
+  const music = block.children[1];
+  music.play();
+  const analyser = sources[id];
+  animationIds[id] = getAudioVolume(id, divToChange, analyser);
+  PLAY_PAUSE_BTN.innerHTML = pauseIcon;
+}
+
+function pauseTrack(block) {
+  block.children[1].pause();
+  cancelAnimationFrame(animationIds[block.id]);
+  PLAY_PAUSE_BTN.innerHTML = playIcon;
+}
+
+function togglePlaying() {
+  isPlaying = !isPlaying;
+  AUDIO_BLOCKS.forEach(isPlaying ? playTrack : pauseTrack);
+}
+
 function getAudioVolume(id, divToChange, analyser) {
-  const fbc_array = new Uint8Array(analyser.frequencyBinCount);
-  analyser.getByteFrequencyData(fbc_array)
-  const average = fbc_array.reduce((accum, val) => accum + val, 0) / fbc_array.length
+  const fbcArray = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(fbcArray);
+
+  const average = fbcArray.reduce((accum, val) => accum + val, 0) / fbcArray.length;
   divToChange.style.transform = `translate(-50%, -50%) scale(${average / SCALES[id]})`;
   return requestAnimationFrame(() => getAudioVolume(id, divToChange, analyser));
 }
