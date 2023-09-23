@@ -10,7 +10,7 @@ const playIcon = '<i class="fa-solid fa-play" style="color: #ffffff;"></i>';
 const pauseIcon = '<i class="fa-solid fa-pause" style="color: #ffffff;"></i>';
 
 const SCALES = {
-  keys: .5,
+  keys: .75,
   synths: .5,
   bass: .25,
   drums: 1.5,
