@@ -10,6 +10,109 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato&family=Tektur&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+<style>
+body {
+  background-color: #161D46;
+  color: #EEE;
+  font-family: 'VT323', monospace;
+  padding: 0;
+}
+
+h1 {
+  height: 10vh;
+  margin: 0;
+  text-align: center;
+}
+
+.blocks {
+  width: 100vw;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+
+.block {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.instrument-name {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  font-size: 2rem;
+  z-index: -1;
+}
+
+.sound {
+  width: 1vw;
+  height: 1vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  transition: background-color .5s;
+  z-index: -1;
+}
+
+#synths > .sound {
+  background-color: #5A0BBF;
+}
+#synths:hover > .sound {
+  background-color: #A31EE2;
+}
+
+#keys > .sound {
+  background-color: #0BBF9B;
+}
+#keys:hover > .sound {
+  background-color: #03FFC3;
+}
+
+#drums > .sound {
+  background-color: #BF0B36;
+}
+#drums:hover > .sound {
+  background-color: #DF296A;
+}
+
+#bass > .sound {
+  background-color: #0B3DBF;
+}
+#bass:hover > .sound {
+  background-color: #1B47E3;
+}
+
+#controls {
+  height: 7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#playPause {
+  height: 100%;
+  width: 5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #00000000;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+#playPause i {
+  color:  #03FFC3;
+}
+</style>
 <body>
   <h1>Acceptance Cave by Tesla's Ghost</h1>
   <div class="blocks">
@@ -38,5 +141,99 @@
     <button id="playPause"></button>
   </div>
 </body>
-<script src="app.js"></script>
+<script>
+const AUDIO_BLOCKS = [
+  document.getElementById("keys"),
+  document.getElementById("synths"),
+  document.getElementById("bass"),
+  document.getElementById("drums")
+];
+
+const PLAY_PAUSE_BTN = document.getElementById("playPause");
+const playIcon = '<i class="fa-solid fa-play"></i>';
+const pauseIcon = '<i class="fa-solid fa-pause"></i>';
+
+const SCALES = {
+  keys: .75,
+  synths: .5,
+  bass: .25,
+  drums: 1.5,
+};
+
+let animationIds = AUDIO_BLOCKS.reduce(function createIdsObj(accum, val) {
+  accum[val.id] = null;
+  return accum;
+}, {});
+let context = new AudioContext();
+const sources = {};
+let isPlaying = false;
+
+function init() {
+  context = new AudioContext();
+  AUDIO_BLOCKS.forEach(function createMediaSource(block) {
+    const id = block.id;
+    const music = block.children[1];
+    const analyser = context.createAnalyser();
+    const source = context.createMediaElementSource(music);
+    source.connect(analyser);
+    analyser.connect(context.destination);
+    sources[id] = analyser;
+  });
+  PLAY_PAUSE_BTN.innerHTML = playIcon;
+}
+
+async function startContext() {
+  if (context.state == "suspended") await context.resume();
+}
+
+function getVisual(el) {
+  return el.children[0];
+}
+
+function getAudioTrack(el) {
+  return el.children[1];
+}
+
+function playTrack(block) {
+  startContext();
+  const id = block.id;
+  const visualToChange = getVisual(block);
+  const music = getAudioTrack(block);
+  music.play();
+  const analyser = sources[id];
+  animationIds[id] = getAudioVolume(id, visualToChange, analyser);
+  PLAY_PAUSE_BTN.innerHTML = pauseIcon;
+  block.addEventListener("click", toggleMute);
+}
+
+function pauseTrack(block) {
+  getAudioTrack(block).pause();
+  cancelAnimationFrame(animationIds[block.id]);
+  PLAY_PAUSE_BTN.innerHTML = playIcon;
+  block.removeEventListener("click", toggleMute);
+}
+
+function togglePlaying() {
+  isPlaying = !isPlaying;
+  AUDIO_BLOCKS.forEach(isPlaying ? playTrack : pauseTrack);
+}
+
+function toggleMute(e) {
+  const track = getAudioTrack(e.target)
+  track.muted = !track.muted;
+}
+
+function getAudioVolume(id, visualToChange, analyser) {
+  const fbcArray = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(fbcArray);
+
+  const average = fbcArray.reduce((accum, val) => accum + val, 0) / fbcArray.length;
+  visualToChange.style.transform = `translate(-50%, -50%) scale(${average / SCALES[id]})`;
+  return requestAnimationFrame(() => getAudioVolume(id, visualToChange, analyser));
+}
+
+PLAY_PAUSE_BTN.addEventListener("click", togglePlaying)
+window.addEventListener("load", init);
+
+</script>
 </html>
