@@ -5,7 +5,7 @@ body {
   padding: 0;
 }
 
-h1 {
+.title {
   height: 10vh;
   margin: 0;
   text-align: center;
@@ -78,7 +78,7 @@ h1 {
 }
 
 #controls {
-  height: 7vh;
+  height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
