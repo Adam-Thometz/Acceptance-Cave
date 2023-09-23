@@ -25,6 +25,7 @@ h1 {
   width: 100%;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .instrument-name {
@@ -33,6 +34,7 @@ h1 {
   left: 50%;
   transform: translate(-50%, -100%);
   font-size: 2rem;
+  z-index: -1;
 }
 
 .sound {
@@ -43,22 +45,36 @@ h1 {
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
   border-radius: 50%;
+  transition: background-color .5s;
+  z-index: -1;
+}
+
+#synths > .sound {
+  background-color: #5A0BBF;
+}
+#synths:hover > .sound {
+  background-color: #A31EE2;
 }
 
 #keys > .sound {
   background-color: #0BBF9B;
 }
-
-#synths > .sound {
-  background-color: #A31EE2;
-}
-
-#bass > .sound {
-  background-color: #1B47E3;
+#keys:hover > .sound {
+  background-color: #03FFC3;
 }
 
 #drums > .sound {
+  background-color: #BF0B36;
+}
+#drums:hover > .sound {
   background-color: #DF296A;
+}
+
+#bass > .sound {
+  background-color: #0B3DBF;
+}
+#bass:hover > .sound {
+  background-color: #1B47E3;
 }
 
 #controls {
@@ -78,4 +94,8 @@ h1 {
   border: none;
   font-size: 3rem;
   cursor: pointer;
+}
+
+#playPause i {
+  color:  #03FFC3;
 }

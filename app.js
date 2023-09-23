@@ -6,8 +6,8 @@ const AUDIO_BLOCKS = [
 ];
 
 const PLAY_PAUSE_BTN = document.getElementById("playPause");
-const playIcon = '<i class="fa-solid fa-play" style="color: #03FFC3;"></i>';
-const pauseIcon = '<i class="fa-solid fa-pause" style="color: #03FFC3;"></i>';
+const playIcon = '<i class="fa-solid fa-play"></i>';
+const pauseIcon = '<i class="fa-solid fa-pause"></i>';
 
 const SCALES = {
   keys: .75,
@@ -42,21 +42,31 @@ async function startContext() {
   if (context.state == "suspended") await context.resume();
 }
 
+function getVisual(el) {
+  return el.children[0];
+}
+
+function getAudioTrack(el) {
+  return el.children[1];
+}
+
 function playTrack(block) {
   startContext();
   const id = block.id;
-  const divToChange = block.children[0];
-  const music = block.children[1];
+  const visualToChange = getVisual(block);
+  const music = getAudioTrack(block);
   music.play();
   const analyser = sources[id];
-  animationIds[id] = getAudioVolume(id, divToChange, analyser);
+  animationIds[id] = getAudioVolume(id, visualToChange, analyser);
   PLAY_PAUSE_BTN.innerHTML = pauseIcon;
+  block.addEventListener("click", toggleMute);
 }
 
 function pauseTrack(block) {
-  block.children[1].pause();
+  getAudioTrack(block).pause();
   cancelAnimationFrame(animationIds[block.id]);
   PLAY_PAUSE_BTN.innerHTML = playIcon;
+  block.removeEventListener("click", toggleMute);
 }
 
 function togglePlaying() {
@@ -64,13 +74,18 @@ function togglePlaying() {
   AUDIO_BLOCKS.forEach(isPlaying ? playTrack : pauseTrack);
 }
 
-function getAudioVolume(id, divToChange, analyser) {
+function toggleMute(e) {
+  const track = getAudioTrack(e.target)
+  track.muted = !track.muted;
+}
+
+function getAudioVolume(id, visualToChange, analyser) {
   const fbcArray = new Uint8Array(analyser.frequencyBinCount);
   analyser.getByteFrequencyData(fbcArray);
 
   const average = fbcArray.reduce((accum, val) => accum + val, 0) / fbcArray.length;
-  divToChange.style.transform = `translate(-50%, -50%) scale(${average / SCALES[id]})`;
-  return requestAnimationFrame(() => getAudioVolume(id, divToChange, analyser));
+  visualToChange.style.transform = `translate(-50%, -50%) scale(${average / SCALES[id]})`;
+  return requestAnimationFrame(() => getAudioVolume(id, visualToChange, analyser));
 }
 
 PLAY_PAUSE_BTN.addEventListener("click", togglePlaying)
