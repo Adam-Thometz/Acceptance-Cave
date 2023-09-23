@@ -10,10 +10,10 @@ const playIcon = '<i class="fa-solid fa-play" style="color: #ffffff;"></i>';
 const pauseIcon = '<i class="fa-solid fa-pause" style="color: #ffffff;"></i>';
 
 const SCALES = {
-  keys: 1.5,
-  synths: 1.5,
-  bass: 0.75,
-  drums: 5,
+  keys: .5,
+  synths: .5,
+  bass: .25,
+  drums: 1.5,
 };
 
 let animationIds = AUDIO_BLOCKS.reduce(function createIdsObj(accum, val) {

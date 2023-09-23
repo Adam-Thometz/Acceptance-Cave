@@ -14,9 +14,8 @@ h1 {
 .blocks {
   width: 100vw;
   height: 80vh;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-items: center;
 }
@@ -25,6 +24,7 @@ h1 {
   height: 100%;
   width: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .instrument-name {
