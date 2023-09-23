@@ -1,5 +1,5 @@
 body {
-  background-color: black;
+  background-color: #161D46;
   color: #EEE;
   font-family: 'VT323', monospace;
   padding: 0;
@@ -46,7 +46,7 @@ h1 {
 }
 
 #keys > .sound {
-  background-color: #03FFC3;
+  background-color: #0BBF9B;
 }
 
 #synths > .sound {
@@ -74,9 +74,8 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: black;
+  background-color: #00000000;
   border: none;
   font-size: 3rem;
   cursor: pointer;
-  color: #EEE;
 }

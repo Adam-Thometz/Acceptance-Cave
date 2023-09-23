@@ -6,8 +6,8 @@ const AUDIO_BLOCKS = [
 ];
 
 const PLAY_PAUSE_BTN = document.getElementById("playPause");
-const playIcon = '<i class="fa-solid fa-play" style="color: #ffffff;"></i>';
-const pauseIcon = '<i class="fa-solid fa-pause" style="color: #ffffff;"></i>';
+const playIcon = '<i class="fa-solid fa-play" style="color: #03FFC3;"></i>';
+const pauseIcon = '<i class="fa-solid fa-pause" style="color: #03FFC3;"></i>';
 
 const SCALES = {
   keys: .75,
