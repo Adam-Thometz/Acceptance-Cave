@@ -184,7 +184,11 @@ function init() {
 }
 
 async function startContext() {
-  if (context.state == "suspended") await context.resume();
+  console.log(context.state)
+  if (context.state == "suspended") {
+    await context.resume()
+    console.log("started!")
+  };
 }
 
 function getVisual(el) {
@@ -226,7 +230,7 @@ function toggleMute(e) {
 }
 
 function getAudioVolume(id, visualToChange, analyser) {
-  console.log(analyser)
+  console.log(id)
   const fbcArray = new Uint8Array(analyser.frequencyBinCount);
   analyser.getByteFrequencyData(fbcArray);
 
