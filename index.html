@@ -173,17 +173,12 @@ function init() {
   context = new AudioContext();
   AUDIO_BLOCKS.forEach(function createMediaSource(block) {
     const id = block.id;
-    console.log(id)
     const music = block.children[1];
-    console.log(music)
     const analyser = context.createAnalyser();
-    console.log(analyser)
     const source = context.createMediaElementSource(music);
-    console.log(source)
     source.connect(analyser);
     analyser.connect(context.destination);
     sources[id] = analyser;
-    console.log(sources)
   });
   PLAY_PAUSE_BTN.innerHTML = playIcon;
 }
@@ -201,17 +196,12 @@ function getAudioTrack(el) {
 }
 
 function playTrack(block) {
-  console.log("play")
   startContext();
   const id = block.id;
   const visualToChange = getVisual(block);
-  console.log(visualToChange)
   const music = getAudioTrack(block);
-  console.log(music)
   music.play();
-  console.log("played")
   const analyser = sources[id];
-  console.log("played")
   animationIds[id] = getAudioVolume(id, visualToChange, analyser);
   PLAY_PAUSE_BTN.innerHTML = pauseIcon;
   block.addEventListener("click", toggleMute);
@@ -241,6 +231,7 @@ function getAudioVolume(id, visualToChange, analyser) {
   analyser.getByteFrequencyData(fbcArray);
 
   const average = fbcArray.reduce((accum, val) => accum + val, 0) / fbcArray.length;
+  console.log(average)
   visualToChange.style.transform = `translate(-50%, -50%) scale(${average / SCALES[id]})`;
   return requestAnimationFrame(() => getAudioVolume(id, visualToChange, analyser));
 }
