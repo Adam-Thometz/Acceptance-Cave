@@ -183,14 +183,6 @@ function init() {
   PLAY_PAUSE_BTN.innerHTML = playIcon;
 }
 
-async function startContext() {
-  console.log(context.state)
-  if (context.state == "suspended") {
-    await context.resume()
-    console.log("started!")
-  };
-}
-
 function getVisual(el) {
   return el.children[0];
 }
@@ -199,8 +191,8 @@ function getAudioTrack(el) {
   return el.children[1];
 }
 
-function playTrack(block) {
-  startContext();
+async function playTrack(block) {
+  if (context.state == "suspended") await context.resume();
   const id = block.id;
   const visualToChange = getVisual(block);
   const music = getAudioTrack(block);
