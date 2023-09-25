@@ -88,5 +88,5 @@ function getAudioVolume(id, visualToChange, analyser) {
   return requestAnimationFrame(() => getAudioVolume(id, visualToChange, analyser));
 }
 
-PLAY_PAUSE_BTN.addEventListener("click", togglePlaying)
+PLAY_PAUSE_BTN.addEventListener("click", togglePlaying);
 window.addEventListener("load", init);
