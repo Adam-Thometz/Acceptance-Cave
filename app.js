@@ -16,26 +16,13 @@ const SCALES = {
   drums: 1.5,
 };
 
-let animationIds = AUDIO_BLOCKS.reduce(function createIdsObj(accum, val) {
+let animationIds = AUDIO_BLOCKS.reduce(function createKeyForAnimationId(accum, val) {
   accum[val.id] = null;
   return accum;
 }, {});
 let context = new AudioContext();
 const sources = {};
 let isPlaying = false;
-
-function init() {
-  AUDIO_BLOCKS.forEach(function createMediaSource(block) {
-    const id = block.id;
-    const music = getAudioTrack(block);
-    const analyser = context.createAnalyser();
-    const source = context.createMediaElementSource(music);
-    source.connect(analyser);
-    analyser.connect(context.destination);
-    sources[id] = analyser;
-  });
-  PLAY_PAUSE_BTN.innerHTML = playIcon;
-}
 
 async function startContext() {
   if (context.state == "suspended") await context.resume();
@@ -87,5 +74,16 @@ function getAudioVolume(id, visualToChange, analyser) {
   return requestAnimationFrame(() => getAudioVolume(id, visualToChange, analyser));
 }
 
-PLAY_PAUSE_BTN.addEventListener("click", togglePlaying);
-init();
+(function init() {
+  AUDIO_BLOCKS.forEach(function createMediaSource(block) {
+    const id = block.id;
+    const music = getAudioTrack(block);
+    const analyser = context.createAnalyser();
+    const source = context.createMediaElementSource(music);
+    source.connect(analyser);
+    analyser.connect(context.destination);
+    sources[id] = analyser;
+  });
+  PLAY_PAUSE_BTN.innerHTML = playIcon;
+  PLAY_PAUSE_BTN.addEventListener("click", togglePlaying);
+})();
