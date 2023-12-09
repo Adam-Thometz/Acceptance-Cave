@@ -25,10 +25,9 @@ const sources = {};
 let isPlaying = false;
 
 function init() {
-  context = new AudioContext();
   AUDIO_BLOCKS.forEach(function createMediaSource(block) {
     const id = block.id;
-    const music = block.children[1];
+    const music = getAudioTrack(block);
     const analyser = context.createAnalyser();
     const source = context.createMediaElementSource(music);
     source.connect(analyser);
@@ -89,4 +88,4 @@ function getAudioVolume(id, visualToChange, analyser) {
 }
 
 PLAY_PAUSE_BTN.addEventListener("click", togglePlaying);
-window.addEventListener("load", init);
+init();
